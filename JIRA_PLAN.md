@@ -2,10 +2,8 @@
 
 Livrable demande : Epics et tickets, prets a recopier dans Jira.
 
-Sujet : CNN (TensorFlow/Keras) pour classer des radiographies thoraciques en NORMAL / PNEUMONIA,
-puis prototype Streamlit. Travail individuel, 5 jours.
-
-Statuts utilises : `A faire` / `En cours` / `Termine`.
+Sujet : CNN (TensorFlow/Keras) qui classe des radiographies en NORMAL / PNEUMONIA, plus un prototype Streamlit.
+Travail individuel, 5 jours. Statuts : `A faire` / `En cours` / `Termine`.
 
 ---
 
@@ -13,37 +11,35 @@ Statuts utilises : `A faire` / `En cours` / `Termine`.
 
 | Cle | Titre | Description courte | Statut |
 |-----|-------|--------------------|--------|
-| CHEST-1 | Telecharger et explorer le dataset | Installer kagglehub, telecharger `paultimothymooney/chest-xray-pneumonia`, lister les dossiers train/val/test et compter les images par classe. | Termine |
-| CHEST-2 | Filtrer les images corrompues | Verifier chaque fichier avec PIL, lister et exclure les images illisibles, compter les exclusions. | Termine |
-| CHEST-3 | Split train / validation / test sans fuite | Garder le test Kaggle comme test independant, fusionner train+val (val ne contient que 16 images), split stratifie 80/20 pour la validation. Seed fixee. | Termine |
-| CHEST-4 | Pretraitement et gestion du desequilibre | Redimension 180x180, conversion RGB, normalisation [0,1] appliquee une seule fois, graphique de distribution, class_weight pour le desequilibre. | Termine |
+| CHEST-1 | Recuperer et explorer le dataset | Installer kagglehub, telecharger `paultimothymooney/chest-xray-pneumonia`, lister les dossiers train/val/test, compter les images par classe et tracer la distribution. | Termine |
+| CHEST-2 | Charger les images avec PIL | Boucle for + PIL : RGB, 180x180, tableaux NumPy uint8, try/except pour exclure et compter les images corrompues, labels depuis les noms de dossiers. | Termine |
+| CHEST-3 | Split train / validation / test sans fuite | Deux appels a train_test_split avec stratify : d abord le test independant (20 %), ensuite la validation. Seed fixee a 42. | Termine |
+| CHEST-4 | Traiter le desequilibre des classes | Graphique de distribution, constat du ratio (~2,9 PNEUMONIA pour 1 NORMAL), calcul des poids de classes avec la formule total / (2 x nombre). | Termine |
 
 ## Epic 2 : Modele
 
 | Cle | Titre | Description courte | Statut |
 |-----|-------|--------------------|--------|
-| CHEST-5 | Construire le CNN | Sequence Conv2D + MaxPooling2D + Flatten + Dense + Dropout, sortie 1 neurone sigmoide, compile Adam + binary_crossentropy. | Termine |
-| CHEST-6 | Entrainement avec callbacks | model.fit(), augmentation sur le train seulement, EarlyStopping + ReduceLROnPlateau, duree mesuree. | Termine |
-| CHEST-7 | Analyse des courbes d'entrainement | Courbes loss et accuracy train/validation, detection du surapprentissage / sous-apprentissage, commentaires dans le notebook. | Termine |
+| CHEST-5 | Construire le CNN simple | Sequential : Rescaling + RandomFlip/Rotation/Zoom dans le modele, 3 blocs Conv2D + MaxPooling2D, Flatten, Dense(128), Dropout, sortie 1 neurone sigmoide. | Termine |
+| CHEST-6 | Entrainer avec callbacks | model.fit avec class_weight, EarlyStopping + ReduceLROnPlateau, duree mesuree, courbes loss et accuracy train vs validation. | Termine |
 
 ## Epic 3 : Evaluation
 
 | Cle | Titre | Description courte | Statut |
 |-----|-------|--------------------|--------|
-| CHEST-8 | Evaluer sur le test independant | Accuracy, precision, recall, F1, ROC-AUC, matrice de confusion, classification_report. | Termine |
-| CHEST-9 | Analyse des erreurs | Compter et afficher les faux positifs et faux negatifs, montrer des exemples corrects et incorrects, expliquer pourquoi un faux negatif est grave en medical. | Termine |
-| CHEST-10 | Etude du seuil de decision | Comparer les metriques pour plusieurs seuils (0.3 / 0.5 / 0.7) et justifier le seuil choisi. | Termine |
+| CHEST-7 | Evaluer sur le test independant | Accuracy, precision, recall, F1, ROC-AUC, classification_report et matrice de confusion. | Termine |
+| CHEST-8 | Analyser les erreurs | Compter et afficher les faux positifs et faux negatifs, 6 predictions correctes et 6 incorrectes avec leurs scores, comparaison train / validation / test. | Termine |
+| CHEST-9 | Etudier le seuil de decision | Courbe ROC, metriques pour les seuils 0.3 a 0.7, justification du seuil (rappel : un faux negatif est plus grave qu un faux positif). | Termine |
 
 ## Epic 4 : Deploiement
 
 | Cle | Titre | Description courte | Statut |
 |-----|-------|--------------------|--------|
-| CHEST-11 | Sauvegarde et rechargement | Sauvegarder le modele en .keras + config.json (taille, classes, seuil), recharger sans reentrainer et verifier les memes predictions. | Termine |
-| CHEST-12 | Application Streamlit | Upload image (JPEG/JPG/PNG/BMP), affichage, bouton de prediction, classe + score PNEUMONIA, gestion des erreurs, avertissement pedagogique. | Termine |
+| CHEST-10 | Sauvegarder, recharger, predire | chestscan_model.keras + config.json, rechargement sans reentrainer avec verification des memes predictions, fonction predict_xray testee sur plusieurs images. | Termine |
+| CHEST-11 | Application Streamlit | Upload JPEG/JPG/PNG/BMP, affichage, bouton, classe + score PNEUMONIA, try/except sur fichier invalide, avertissement pedagogique, modele charge une seule fois. | Termine |
 
 ## Epic 5 : Documentation
 
 | Cle | Titre | Description courte | Statut |
 |-----|-------|--------------------|--------|
-| CHEST-13 | README complet | Description, source du dataset, recuperation des donnees, pretraitement, architecture, resultats reels, structure, installation, lancement, limites. | Termine |
-| CHEST-14 | Depot GitHub propre | .gitignore sans le dataset, requirements.txt, code commente en francais, arborescence claire. | Termine |
+| CHEST-12 | README et depot GitHub propre | README complet (description, source des donnees, pretraitement, architecture, resultats reels, structure, installation, lancement, limites), requirements.txt, .gitignore sans le dataset. | Termine |
