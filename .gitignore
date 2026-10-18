@@ -1,0 +1,13 @@
+# Le dataset fait plus de 2 Go : on le telecharge au premier lancement (voir README.md)
+data/
+data.zip
+
+# Fichiers techniques Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.jupyter/
+
+# Editeur
+.vscode/
+.idea/

@@ -1,0 +1,13 @@
+# Dependances du projet ChestScan AI
+# Installation : pip install -r requirements.txt
+# En Colab, TensorFlow est deja installe (GPU disponible : Runtime > Change runtime type > GPU)
+
+tensorflow>=2.16
+streamlit>=1.32
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.8
+seaborn>=0.13
+scikit-learn>=1.4
+pillow>=10.0
+kagglehub>=0.2
