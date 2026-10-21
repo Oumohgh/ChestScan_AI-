@@ -1,6 +1,4 @@
-# Dependances du projet ChestScan AI
-# Installation : pip install -r requirements.txt
-# En Colab, TensorFlow est deja installe (GPU disponible : Runtime > Change runtime type > GPU)
+
 
 tensorflow>=2.16
 streamlit>=1.32
